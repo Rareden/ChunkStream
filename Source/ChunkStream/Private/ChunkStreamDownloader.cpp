@@ -170,6 +170,10 @@ void UChunkStreamDownloader::OnDownloadProgress(uint64 BytesReceived, float InPr
 {
 	CurrentResultParams.Progress=InProgress;
 	CurrentResultParams.DownloadTaskResult = EChunkStreamDownloadResult::InProgress;
+	if (StreamChunkDownloader)
+	{
+		CurrentResultParams.HttpStatusCode = StreamChunkDownloader->GetHttpStatusCode();
+	}
 	Native_DownloadProgress.Broadcast(CurrentResultParams);
 	OnProgress.Broadcast(CurrentResultParams);
 }
@@ -177,6 +181,11 @@ void UChunkStreamDownloader::OnDownloadProgress(uint64 BytesReceived, float InPr
 void UChunkStreamDownloader::OnChunkCompleted(TUniquePtr<StreamChunkDownloader::FChunkInfo>&& ChunkData)
 {
 	TRACE_CPUPROFILER_EVENT_SCOPE(UChunkStreamDownloader::OnChunkCompleted)
+	if (StreamChunkDownloader)
+	{
+		CurrentResultParams.HttpStatusCode = StreamChunkDownloader->GetHttpStatusCode();
+	}
+	
 	check(ChunkData);
 	TWeakObjectPtr<UChunkStreamDownloader> WeakThis = this;
 	AsyncTask(ENamedThreads::Type::AnyHiPriThreadNormalTask, [WeakThis,  ChunkData = MoveTemp(ChunkData)]() mutable 
@@ -198,9 +207,9 @@ void UChunkStreamDownloader::WriteChunkToFile(TUniquePtr<StreamChunkDownloader::
 	check(ChunkData);
 	if (!OpenFile)
 	{
-		// not ideal, has problems on android with it
-		//OpenFileForWriting();
+#if !UE_BUILD_SHIPPING
 		check(0);
+#endif
 		if (!OpenFile)
 		{
 			bChunkPendingWrite.store(false);
@@ -250,7 +259,7 @@ void UChunkStreamDownloader::WriteChunkToFile(TUniquePtr<StreamChunkDownloader::
 	{
 		// flushes the in memory version of the file to storage
 		OpenFile->Flush();
-		LOG("Written chunk [%lld-%lld] of %lld total bytes", 
+		LOG_VERBOSE("Written chunk [%lld-%lld] of %lld total bytes", 
 			ChunkData->StartOffset, ChunkData->EndOffset, ChunkData->TotalFileSize);
 	}
 	else
@@ -263,7 +272,10 @@ void UChunkStreamDownloader::WriteChunkToFile(TUniquePtr<StreamChunkDownloader::
 
 void UChunkStreamDownloader::OnDownloadComplete(EChunkStreamDownloadResult Result)
 {
-
+	if (StreamChunkDownloader)
+	{
+		CurrentResultParams.HttpStatusCode = StreamChunkDownloader->GetHttpStatusCode();
+	}
 	TWeakObjectPtr<UChunkStreamDownloader> WeakDownloader = this;
 	AsyncTask(ENamedThreads::Type::AnyHiPriThreadNormalTask,[WeakDownloader, Result = MoveTemp(Result)]() mutable
 	{

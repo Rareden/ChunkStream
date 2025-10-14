@@ -2,5 +2,3 @@
 
 
 #include "ChunkStreamLogs.h"
-
-DEFINE_LOG_CATEGORY(LogChunkStream)

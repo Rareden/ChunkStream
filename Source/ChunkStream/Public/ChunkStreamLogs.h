@@ -7,7 +7,7 @@
 #endif
 
 
-DECLARE_LOG_CATEGORY_EXTERN(LogChunkStream, Log, All);
+DECLARE_LOG_CATEGORY_CLASS(LogChunkStream, Log, All);
 
 #if !PLATFORM_ANDROID
 #define FUNC __FUNCTION__

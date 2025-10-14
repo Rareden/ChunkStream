@@ -136,6 +136,7 @@ public:
 	// Has the download been canceled
 	bool IsCanceled() const { return bCanceled; }
 	bool HasStarted() const { return bHasStarted;}
+	int32 GetHttpStatusCode() const { return ChunkDownloadResponseCode.load(std::memory_order_relaxed); }
 protected:
 
 	// Cancels the download internally and notifies the owner with a specific reason

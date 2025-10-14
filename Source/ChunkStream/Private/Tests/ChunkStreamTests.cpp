@@ -91,7 +91,8 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(ChunkStreamTests3, "ChunkStream.LargeVideo_Pope
 
 bool ChunkStreamTests3::RunTest(const FString& Parameters)
 {
-	FString URL= TEXT("https://tile.loc.gov/storage-services/service/mbrs/ntscrm/00068306/00068306.mp4");
+	//FString URL= TEXT("https://tile.loc.gov/storage-services/service/mbrs/ntscrm/00068306/00068306.mp4");
+	FString URL= TEXT("http://ipv4.download.thinkbroadband.com/5GB.zip");
 
 	FString FileSavePath = FPaths::Combine(FPaths::ProjectSavedDir(),FPaths::GetCleanFilename(URL));
 

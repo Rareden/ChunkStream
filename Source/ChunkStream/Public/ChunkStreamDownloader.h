@@ -24,6 +24,8 @@ struct FChunkStreamResultParams
 	// 0 -> 1 Progress of the download
 	UPROPERTY(BlueprintReadOnly)
 	float Progress;
+	UPROPERTY(BlueprintReadOnly)
+	int32 HttpStatusCode;
 	// Current download task result 
 	UPROPERTY(BlueprintReadOnly)
 	EChunkStreamDownloadResult DownloadTaskResult;
@@ -43,10 +45,16 @@ class CHUNKSTREAM_API UChunkStreamDownloader : public UBlueprintAsyncActionBase
 
 public:
 	virtual void BeginDestroy() override;
-	virtual bool IsReadyForFinishDestroy() override; 
-
-	UFUNCTION(BlueprintCallable, Category = "ChunkStreamDownloader",meta=(BlueprintInternalUseOnly,WorldContext="WorldContext",DefaultToSelf="WorldContext",HidePin="WorldContext"))
-	static UChunkStreamDownloader* DownloadFileToStorage(const UObject* WorldContext,const FString& URL, const FString& ContentType, const FString& FileSavePathAndName
+	virtual bool IsReadyForFinishDestroy() override;
+	
+	/** Download a file to storage with chunk streaming.
+	 * @param URL : HTTPS URL to download the file from
+	 * @param ContentType : Content type for the request, can be left empty if unknown
+	 * @param FileSavePathAndName : Location to save to with the file name, eg C:/MyGame/MyFile.mp4
+	 */
+	UFUNCTION(BlueprintCallable,Category = "ChunkStreamDownloader",meta=(BlueprintInternalUseOnly=true,WorldContext="WorldContext",DefaultToSelf="WorldContext",HidePin="WorldContext"))
+	static UChunkStreamDownloader* DownloadFileToStorage(const UObject* WorldContext,const FString& URL,
+		const FString& ContentType = TEXT("application/json"), const FString& FileSavePathAndName = TEXT("")
 			);
 
 
