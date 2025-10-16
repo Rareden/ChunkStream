@@ -49,12 +49,11 @@ public:
 	
 	/** Download a file to storage with chunk streaming.
 	 * @param URL : HTTPS URL to download the file from
-	 * @param ContentType : Content type for the request, can be left empty if unknown
 	 * @param FileSavePathAndName : Location to save to with the file name, eg C:/MyGame/MyFile.mp4
 	 */
 	UFUNCTION(BlueprintCallable,Category = "ChunkStreamDownloader",meta=(BlueprintInternalUseOnly=true,WorldContext="WorldContext",DefaultToSelf="WorldContext",HidePin="WorldContext"))
 	static UChunkStreamDownloader* DownloadFileToStorage(const UObject* WorldContext,const FString& URL,
-		const FString& ContentType = TEXT("application/json"), const FString& FileSavePathAndName = TEXT("")
+		const FString& FileSavePathAndName = TEXT("")
 			);
 
 
@@ -76,22 +75,27 @@ public:
 	bool CancelDownload();
 	UFUNCTION(BlueprintCallable, Category = "ChunkStreamDownloader")
 	float GetProgress() const { return CurrentResultParams.Progress; };
+	
 	UFUNCTION(BlueprintCallable, Category = "ChunkStreamDownloader")
 	bool IsComplete() const { return bCompleted; }
+	UFUNCTION(BlueprintCallable, Category = "ChunkStreamDownloader")
+	bool WasCanceled() const { return  bCanceled;};
+	/*
+	 * Has the download started or is this task waiting for an available spot to start its download
+	 */
 	UFUNCTION(BlueprintCallable, Category = "ChunkStreamDownloader")
 	bool IsActive() const;
 	
 	UPROPERTY(BlueprintReadOnly)
 	FString URL;
-	UPROPERTY(BlueprintReadOnly)
-	FString ContentType;
 	// Where to save the file, name and extension included: eg C:/MyGame/Video.mp4
 	UPROPERTY(BlueprintReadOnly)
 	FString FileSavePath;
+
+protected:
 	UPROPERTY(BlueprintReadOnly)
 	bool bCanceled;
 	
-protected:
 	void OnDownloadProgress(uint64 BytesReceived , float InProgress);
 	void OnChunkCompleted(TUniquePtr<StreamChunkDownloader::FChunkInfo>&&  ChunkData);
 	void WriteChunkToFile(TUniquePtr<StreamChunkDownloader::FChunkInfo>&&  ChunkData);

@@ -82,14 +82,14 @@ bool UChunkStreamDownloader::IsReadyForFinishDestroy()
 }
 
 UChunkStreamDownloader* UChunkStreamDownloader::DownloadFileToStorage(const UObject* WorldContext, const FString& URL,
-                                                                      const FString& ContentType, const FString& LocationToSaveTo)
+                                                                      const FString& LocationToSaveTo)
 {
 	UChunkStreamDownloader* Downloader = NewObject<UChunkStreamDownloader>();
 	if (IsValid(WorldContext))
 	{
 		Downloader->RegisterWithGameInstance(WorldContext);
 	}
-	Downloader->StreamChunkDownloader = MakeShared<FStreamChunkDownloader>(URL, ContentType);
+	Downloader->StreamChunkDownloader = MakeShared<FStreamChunkDownloader>(URL, TEXT("application/json"));
 	Downloader->FileSavePath=LocationToSaveTo;
 	Downloader->CurrentResultParams.Downloader = Downloader;
 	Downloader->URL=URL;

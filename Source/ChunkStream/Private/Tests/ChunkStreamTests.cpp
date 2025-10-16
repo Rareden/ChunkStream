@@ -27,7 +27,7 @@ bool ChunkStreamTests2::RunTest(const FString& Parameters)
 		Cvar->Set(1);
 		AddInfo(TEXT("Chunk size set to 1MB"));
 	}
-	UChunkStreamDownloader* Downloader = UChunkStreamDownloader::DownloadFileToStorage(nullptr,URL,TEXT("application/json"),FileSavePath);
+	UChunkStreamDownloader* Downloader = UChunkStreamDownloader::DownloadFileToStorage(nullptr,URL,FileSavePath);
 	Downloader->AddToRoot();
 	
 	Downloader->Activate();
@@ -110,7 +110,7 @@ bool ChunkStreamTests3::RunTest(const FString& Parameters)
 		Cvar->Set(50);
 		AddInfo(TEXT("Chunk size set to 50MB"));
 	}
-	UChunkStreamDownloader* Downloader = UChunkStreamDownloader::DownloadFileToStorage(nullptr,URL,TEXT("application/json"),FileSavePath);
+	UChunkStreamDownloader* Downloader = UChunkStreamDownloader::DownloadFileToStorage(nullptr,URL,FileSavePath);
 	Downloader->AddToRoot();
 	
 	Downloader->Activate();
@@ -198,7 +198,7 @@ bool ChunkStreamRetryTest::RunTest(const FString& Parameters)
     }
     
     UChunkStreamDownloader* Downloader = UChunkStreamDownloader::DownloadFileToStorage(
-        nullptr, URL, TEXT("application/octet-stream"), FileSavePath);
+        nullptr, URL, FileSavePath);
     Downloader->AddToRoot();
     Downloader->Activate();
     
@@ -265,7 +265,7 @@ bool ChunkStreamTests4::RunTest(const FString& Parameters)
 		Cvar->Set(4);
 		AddInfo(TEXT("Chunk size set to 4MB"));
 	}
-	UChunkStreamDownloader* Downloader = UChunkStreamDownloader::DownloadFileToStorage(nullptr,URL,TEXT("application/json"),FileSavePath);
+	UChunkStreamDownloader* Downloader = UChunkStreamDownloader::DownloadFileToStorage(nullptr,URL,FileSavePath);
 	Downloader->AddToRoot();
 	
 	TSharedPtr<FChunkStreamResultParams> pResult = MakeShared<FChunkStreamResultParams>();
@@ -305,7 +305,7 @@ bool ChunkStreamTests4::RunTest(const FString& Parameters)
 					ElapsedTime, Downloader->GetProgress() * 100.0f));
 				LastLogTime = CurrentTime;
 
-				if (Downloader->bCanceled)
+				if (Downloader->WasCanceled())
 				{
 					TestTrue(TEXT("Download Was canceled with result "), pResult->DownloadTaskResult == EChunkStreamDownloadResult::UserCancelled);
 					Downloader->CancelDownload();
