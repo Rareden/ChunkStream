@@ -1,4 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Copyright (C) 2025 Isaac Cooper - All Rights Reserved
 
 #pragma once
 
@@ -19,15 +19,15 @@ struct FChunkStreamResultParams
 {
 	GENERATED_BODY()
 	// The Downloader object.
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category = "ChunkStreamDownloader")
 	TObjectPtr<class UChunkStreamDownloader> Downloader;
 	// 0 -> 1 Progress of the download
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category = "ChunkStreamDownloader")
 	float Progress;
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category = "ChunkStreamDownloader")
 	int32 HttpStatusCode;
 	// Current download task result 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category = "ChunkStreamDownloader")
 	EChunkStreamDownloadResult DownloadTaskResult;
 	
 };
@@ -86,14 +86,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ChunkStreamDownloader")
 	bool IsActive() const;
 	
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category = "ChunkStreamDownloader")
 	FString URL;
 	// Where to save the file, name and extension included: eg C:/MyGame/Video.mp4
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category = "ChunkStreamDownloader")
 	FString FileSavePath;
 
 protected:
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category = "ChunkStreamDownloader")
 	bool bCanceled;
 	
 	void OnDownloadProgress(uint64 BytesReceived , float InProgress);
@@ -113,7 +113,7 @@ protected:
 	 */
 	static FString GetTempPathForSavePath(const FString& SavePath);
 
-	UPROPERTY()
+	UPROPERTY( )
 	FChunkStreamResultParams CurrentResultParams;
 	
 	FCriticalSection WriteFileLock;

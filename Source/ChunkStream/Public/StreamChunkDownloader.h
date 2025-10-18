@@ -1,10 +1,12 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Copyright (C) 2025 Isaac Cooper - All Rights Reserved
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "ChunkStreamTypes.h"
 #include "Interfaces/IHttpRequest.h"
+#include "Async/Future.h"
+#include "Containers/Ticker.h"
 
 #if ENGINE_MAJOR_VERSION == 4 && ENGINE_MINOR_VERSION >= 20
 #define OLD_HTTP

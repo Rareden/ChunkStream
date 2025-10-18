@@ -1,8 +1,9 @@
-﻿// Copyright Epic Games, Inc. All Rights Reserved.
+﻿// Copyright (C) 2025 Isaac Cooper - All Rights Reserved
 
 #pragma once
 
 #include "Modules/ModuleManager.h"
+#include "HAL/IConsoleManager.h"
 
 class UChunkStreamDownloader;
 

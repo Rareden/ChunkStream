@@ -1,10 +1,17 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Copyright (C) 2025 Isaac Cooper - All Rights Reserved
 
 
 #include "ChunkStreamDownloader.h"
 #include "StreamChunkDownloader.h"
 #include "ChunkStream.h"
 #include "ChunkStreamLogs.h"
+#include "HAL/FileManager.h"
+#include "HAL/PlatformFile.h"
+#include "HAL/PlatformFileManager.h"
+#include "Async/Async.h"
+//#include "GenericPlatform/GenericPlatformFile.h"
+#include "Misc/FileHelper.h"
+#include "Misc/Paths.h"
 
 static constexpr uint64 MB = 1024 * 1024;
 uint64 inline MbToBytes(const uint64& InVal) { return InVal * MB;}
@@ -217,15 +224,13 @@ void UChunkStreamDownloader::WriteChunkToFile(TUniquePtr<StreamChunkDownloader::
 		}
 	}
 	
-	// Calculate the bytes needed for this chunk
 	uint64 BytesWritten = (ChunkData->EndOffset - ChunkData->StartOffset) + 1;
 	
-	// Check if there's enough disk space before writing
 	uint64 TotalDiskSpace = 0;
 	uint64 FreeDiskSpace = 0;
 	if (FPlatformMisc::GetDiskTotalAndFreeSpace(FPaths::GetPath(TempDownloadDir), TotalDiskSpace, FreeDiskSpace))
 	{
-		// Add a small buffer (1MB) to the required space for safety
+		// add a small buffer to the required space for safety
 		const uint64 SafetyBuffer = 1024 * 1024;
 		uint64 RequiredSpace = ChunkData->EndOffset + SafetyBuffer;
 		
@@ -235,24 +240,21 @@ void UChunkStreamDownloader::WriteChunkToFile(TUniquePtr<StreamChunkDownloader::
 				RequiredSpace, FreeDiskSpace);
 			bChunkPendingWrite.store(false);
 			
-			// Cancel the download and trigger completion with error
 			if (StreamChunkDownloader.IsValid())
 			{
 				StreamChunkDownloader->CancelDownload();
 			}
 			
-			// Trigger the completion callback with insufficient disk space error
 			OnDownloadComplete(EChunkStreamDownloadResult::InsufficientDiskSpace);
 			return;
 		}
 	}
 	else
 	{
-		// If we can't check disk space, log a warning but continue
 		LOG_WARN("Unable to check disk space for path: %s", *TempDownloadDir);
 	}
 	
-	// Seek to correct position and write
+	// seek to correct position and write
 	OpenFile->Seek(ChunkData->StartOffset);
 
 	if (OpenFile->Write(ChunkData->Data.GetData(),BytesWritten)	)
@@ -302,7 +304,7 @@ void UChunkStreamDownloader::OnDownloadComplete(EChunkStreamDownloadResult Resul
 				{
 					MoveAttempts++;
 					FPlatformProcess::Sleep(0.5);
-					if (MoveAttempts >= 6)
+					if (MoveAttempts >= 8)
 					{
 						Result = EChunkStreamDownloadResult::FileSystemError;
 						LOG_ERROR("Failed to move to final saving location!");
@@ -335,8 +337,6 @@ void UChunkStreamDownloader::OnDownloadComplete(EChunkStreamDownloadResult Resul
 		}
 			
 	});
-	
-	
 }
 
 void UChunkStreamDownloader::Completed(EChunkStreamDownloadResult InResult)

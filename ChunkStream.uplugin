@@ -8,10 +8,10 @@
 	"CreatedBy": "Isaac Cooper",
 	"CreatedByURL": "https://github.com/Rareden",
 	"DocsURL": "https://docs.google.com/document/d/e/2PACX-1vTqTJmnTqrAcWXr7x6XsUzgc7peNfCc8-FcaFngTmLY_oiQtczn4vBdYOMYsPyWszXsrXndXw9-hStb/pub",
-	"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/3f5c724c-670f-40c5-b5c1-66e18fb38fc8",
+	"MarketplaceURL": "com.epicgames.launcher://ue/Fab/product/334650dc-02e1-466e-8c9e-53a3a4d51795",
 	"CanContainContent": true,
     "SupportURL": "raresplugins@gmail.com",
-    "EngineVersion": "5.6",
+    "EngineVersion": "5.6.0",
 	"IsBetaVersion": false,
 	"IsExperimentalVersion": false,
 	"Installed": false,
@@ -22,5 +22,12 @@
 			"LoadingPhase": "Default",
           "PlatformAllowList": [ "Win64", "Android","Linux" ]
 		}
-    ]
+    ],
+  "Plugins":
+      [
+        {
+          "Name": "AutomationUtils",
+          "Enabled": true
+        }
+      ]
 }

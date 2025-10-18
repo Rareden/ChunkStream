@@ -1,4 +1,5 @@
-﻿
+﻿// Copyright (C) 2025 Isaac Cooper - All Rights Reserved
+
 #if WITH_AUTOMATION_TESTS
 #include "ChunkStreamDownloader.h"
 #include "Misc/AutomationTest.h"
