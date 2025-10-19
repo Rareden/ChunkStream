@@ -37,11 +37,11 @@ public class ChunkStream : ModuleRules
 		    && Target.Platform != UnrealTargetPlatform.IOS
 		    && Target.Platform != UnrealTargetPlatform.TVOS))
 		{
-			PublicDependencyModuleNames.AddRange(
+			PrivateDependencyModuleNames.AddRange(
 				new string[]
 				{
-					"AutomationTest",
-					"AutomationUtils"
+					"AutomationTest"
+					//	"AutomationUtils"
 				}
 			);
 		}
